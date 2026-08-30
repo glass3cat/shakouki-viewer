@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>遮光器土偶_A_500mm 3D Viewer</title>
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+<style>
+html,body{margin:0;padding:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:transparent}
+.wrap{max-width:1200px;margin:auto}
+model-viewer{width:100%;height:640px;background:#eee;border-radius:8px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+button,label{font:inherit;font-size:14px}
+button{padding:8px 12px;border:1px solid #bbb;border-radius:6px;background:#fff;cursor:pointer}
+.note{margin-top:8px;font-size:13px;color:#666;line-height:1.5}
+@media(max-width:700px){model-viewer{height:480px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<model-viewer
+  id="viewer"
+  src="遮光器土偶_A_500mm.glb"
+  alt="遮光器土偶_A_500mm 3Dモデル"
+  camera-controls
+  touch-action="pan-y"
+  shadow-intensity="1"
+  environment-image="neutral"
+  exposure="1"
+  ar
+  ar-modes="webxr scene-viewer quick-look">
+</model-viewer>
+
+<div class="controls">
+  <button type="button" data-view="front">正面</button>
+  <button type="button" data-view="right">右側面</button>
+  <button type="button" data-view="back">背面</button>
+  <button type="button" data-view="left">左側面</button>
+  <button type="button" data-view="top">上面</button>
+  <button type="button" id="reset">初期表示</button>
+  <label><input type="checkbox" id="rotate"> 自動回転</label>
+</div>
+
+<div class="note">
+マウスドラッグで回転、ホイールで拡大縮小できます。スマートフォンでは指で操作できます。
+</div>
+</div>
+
+<script>
+const v=document.getElementById("viewer");
+const views={
+  front:"0deg 75deg auto",
+  right:"90deg 75deg auto",
+  back:"180deg 75deg auto",
+  left:"-90deg 75deg auto",
+  top:"0deg 0deg auto"
+};
+document.querySelectorAll("[data-view]").forEach(b=>{
+  b.addEventListener("click",()=>{
+    v.cameraOrbit=views[b.dataset.view];
+    if(v.jumpCameraToGoal){v.jumpCameraToGoal();}
+  });
+});
+document.getElementById("reset").addEventListener("click",()=>{
+  v.cameraOrbit="0deg 75deg auto";
+  v.cameraTarget="auto auto auto";
+  if(v.jumpCameraToGoal){v.jumpCameraToGoal();}
+});
+document.getElementById("rotate").addEventListener("change",e=>{
+  if(e.target.checked){v.setAttribute("auto-rotate","");}
+  else{v.removeAttribute("auto-rotate");}
+});
+</script>
+</body>
+</html>
